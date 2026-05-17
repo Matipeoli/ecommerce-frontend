@@ -1,0 +1,25 @@
+<div class="confirmation-page">
+  <div class="confirmation-card">
+
+    <!-- Success icon -->
+    <div class="success-circle">
+      <svg viewBox="0 0 52 52" class="checkmark-svg">
+        <circle cx="26" cy="26" r="25" fill="none" stroke="#3B6D11" stroke-width="2"/>
+        <path fill="none" stroke="#3B6D11" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+          d="M14 27l8 8 16-16"/>
+      </svg>
+    </div>
+
+    <p class="order-id">Orden #{{ orderId }}</p>
+    <h1 class="confirm-title">¡Pedido confirmado!</h1>
+    <p class="confirm-sub">Te avisaremos cuando tu repartidor esté en camino.</p>
+
+    <div class="time-box">
+      <i class="pi pi-clock"></i>
+      <span>Tiempo estimado: <strong>25–35 min</strong></span>
+    </div>
+
+    <a routerLink="/catalog" class="back-btn">Volver al menú</a>
+
+  </div>
+</div>

@@ -1,0 +1,172 @@
+<div class="checkout-page">
+
+  <!-- Stepper -->
+  <div class="stepper">
+    <div class="step done">
+      <div class="step-circle"><i class="pi pi-check"></i></div>
+      <span class="step-label">Catálogo</span>
+    </div>
+    <div class="step-line done"></div>
+    <div class="step done">
+      <div class="step-circle"><i class="pi pi-check"></i></div>
+      <span class="step-label">Carrito</span>
+    </div>
+    <div class="step-line done"></div>
+    <div class="step active">
+      <div class="step-circle">3</div>
+      <span class="step-label">Checkout</span>
+    </div>
+    <div class="step-line"></div>
+    <div class="step">
+      <div class="step-circle">4</div>
+      <span class="step-label">Confirmación</span>
+    </div>
+  </div>
+
+  <div class="checkout-body">
+
+    <!-- Left: Form -->
+    <section class="checkout-form-col">
+
+      <!-- Delivery form -->
+      <div class="form-section">
+        <h3 class="section-title">Datos de entrega</h3>
+        <form [formGroup]="form" (ngSubmit)="confirm()">
+
+          <div class="field">
+            <label class="field-label">Nombre completo *</label>
+            <input pInputText formControlName="nombre" placeholder="Tu nombre" class="field-input" [class.error]="showError('nombre')" />
+            @if (showError('nombre')) {
+              <span class="field-error">El nombre es requerido</span>
+            }
+          </div>
+
+          <div class="field">
+            <label class="field-label">Teléfono *</label>
+            <input pInputText formControlName="telefono" placeholder="10 dígitos" class="field-input" [class.error]="showError('telefono')" />
+            @if (showError('telefono')) {
+              <span class="field-error">Ingresá 10 dígitos</span>
+            }
+          </div>
+
+          <div class="field">
+            <label class="field-label">Dirección *</label>
+            <input pInputText formControlName="direccion" placeholder="Calle y número" class="field-input" [class.error]="showError('direccion')" />
+            @if (showError('direccion')) {
+              <span class="field-error">La dirección es requerida</span>
+            }
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label class="field-label">Colonia *</label>
+              <input pInputText formControlName="colonia" placeholder="Colonia" class="field-input" [class.error]="showError('colonia')" />
+              @if (showError('colonia')) {
+                <span class="field-error">La colonia es requerida</span>
+              }
+            </div>
+            <div class="field">
+              <label class="field-label">Referencias</label>
+              <input pInputText formControlName="referencias" placeholder="Entre calles, color de casa..." class="field-input" />
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Payment methods -->
+      <div class="form-section">
+        <h3 class="section-title">Método de pago</h3>
+        <div class="payment-options">
+          @for (method of paymentMethods; track method.id) {
+            <div
+              class="payment-option"
+              [class.selected]="selectedPayment === method.id"
+              (click)="selectedPayment = method.id"
+            >
+              <span class="payment-icon">{{ method.icon }}</span>
+              <div class="payment-info">
+                <p class="payment-label">{{ method.label }}</p>
+                <p class="payment-sub">{{ method.sub }}</p>
+              </div>
+              <div class="payment-radio" [class.checked]="selectedPayment === method.id"></div>
+            </div>
+          }
+        </div>
+
+        @if (selectedPayment === 'tarjeta') {
+          <div class="mock-card-form">
+            <h4 class="mock-title">Datos de Tarjeta (Simulación)</h4>
+            <div class="field">
+              <label class="field-label">Número de tarjeta</label>
+              <input pInputText placeholder="0000 0000 0000 0000" class="field-input" maxlength="19"/>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label class="field-label">Vencimiento</label>
+                <input pInputText placeholder="MM/AA" class="field-input" maxlength="5"/>
+              </div>
+              <div class="field">
+                <label class="field-label">CVV</label>
+                <input pInputText placeholder="123" type="password" class="field-input" maxlength="4"/>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+
+    </section>
+
+    <!-- Right: Compact Summary -->
+    <aside class="checkout-summary">
+      <h3 class="summary-title">RESUMEN</h3>
+
+      <div class="mini-items">
+        @for (item of cart.items(); track item.product.id) {
+          <div class="mini-item">
+            <span class="mini-emoji">{{ item.product.emoji }}</span>
+            <span class="mini-name">{{ item.product.name }}</span>
+            <span class="mini-qty">×{{ item.quantity }}</span>
+            <span class="mini-price">${{ item.product.price * item.quantity }}</span>
+          </div>
+        }
+      </div>
+
+      <div class="summary-divider"></div>
+
+      <div class="summary-rows">
+        <div class="summary-row">
+          <span>Subtotal</span><span>${{ cart.subtotal() }}</span>
+        </div>
+        <div class="summary-row">
+          <span>Envío</span>
+          <span [class.free]="cart.shipping() === 0">
+            {{ cart.shipping() === 0 ? 'Gratis' : '$' + cart.shipping() }}
+          </span>
+        </div>
+        @if (cart.discount() > 0) {
+          <div class="summary-row discount">
+            <span>Descuento</span><span>−${{ cart.discount() }}</span>
+          </div>
+        }
+        <div class="summary-divider"></div>
+        <div class="summary-row total-row">
+          <span>Total</span><span>${{ cart.total() }}</span>
+        </div>
+      </div>
+
+      <button class="confirm-btn" (click)="confirm()" [disabled]="isProcessingPayment">
+        @if (isProcessingPayment) {
+          <i class="pi pi-spin pi-spinner" style="margin-right: 0.5rem"></i>
+          Procesando pago...
+        } @else {
+          Confirmar pedido
+        }
+      </button>
+
+      <div class="security-note">
+        <i class="pi pi-lock"></i> Pago seguro y encriptado
+      </div>
+    </aside>
+
+  </div>
+</div>

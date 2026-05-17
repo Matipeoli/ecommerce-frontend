@@ -1,0 +1,47 @@
+<div class="catalog-page">
+
+  <!-- Category Tabs -->
+  <div class="categories-bar">
+    @for (cat of categories; track cat) {
+      <button
+        class="category-tab"
+        [class.active]="selectedCategory() === cat"
+        (click)="selectCategory(cat)"
+      >
+        {{ cat }}
+      </button>
+    }
+  </div>
+
+  <!-- Search -->
+  <div class="search-bar">
+    <div class="search-input-wrap">
+      <i class="pi pi-search search-icon"></i>
+      <input
+        pInputText
+        class="search-input"
+        type="text"
+        placeholder="Buscar platillo..."
+        [value]="searchQuery()"
+        (input)="onSearch($any($event.target).value)"
+      />
+    </div>
+    <span class="result-count">{{ filteredProducts().length }} producto{{ filteredProducts().length !== 1 ? 's' : '' }}</span>
+  </div>
+
+  <!-- Product Grid -->
+  @if (filteredProducts().length > 0) {
+    <div class="product-grid">
+      @for (product of filteredProducts(); track product.id) {
+        <app-product-card [product]="product" />
+      }
+    </div>
+  } @else {
+    <div class="empty-state">
+      <span class="empty-icon">🍽️</span>
+      <p class="empty-title">No encontramos platillos</p>
+      <p class="empty-sub">Intentá con otra búsqueda o categoría</p>
+    </div>
+  }
+
+</div>

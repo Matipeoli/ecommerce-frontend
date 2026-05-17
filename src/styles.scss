@@ -1,0 +1,74 @@
+/* You can add global styles to this file, and also import other style files */
+@import 'primeicons/primeicons.css';
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --color-accent: #D85A30;
+  --color-accent-hover: #993C1D;
+  --color-bg: #F9FAFB;
+  --color-card: #FFFFFF;
+  --color-border: #E5E7EB;
+  --color-text-primary: #1F2937;
+  --color-text-secondary: #6B7280;
+  --color-success: #3B6D11;
+  --color-success-bg: #EAF3DE;
+  --color-error: #A32D2D;
+  --color-error-bg: #FDE8E8;
+  --radius-card: 8px;
+  --radius-btn: 6px;
+  --font-base: 14px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: var(--font-base);
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+}
+
+// PrimeNG global overrides
+.p-button {
+  border-radius: var(--radius-btn) !important;
+  font-family: 'Inter', sans-serif !important;
+}
+
+.p-inputtext {
+  border-radius: var(--radius-btn) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: var(--font-base) !important;
+}
+
+// Custom accent button
+.btn-accent {
+  background: var(--color-accent) !important;
+  border-color: var(--color-accent) !important;
+  color: #fff !important;
+
+  &:hover:not(:disabled) {
+    background: var(--color-accent-hover) !important;
+    border-color: var(--color-accent-hover) !important;
+  }
+
+  &:disabled {
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+  }
+}
+
+// Custom outlined button
+.btn-outline-accent {
+  background: transparent !important;
+  border: 1px solid var(--color-accent) !important;
+  color: var(--color-accent) !important;
+
+  &:hover {
+    background: #FFF3EE !important;
+  }
+}

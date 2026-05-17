@@ -1,0 +1,38 @@
+<article class="product-card">
+  <!-- Badges -->
+  <div class="card-badges">
+    @if (product.badge === 'Popular') {
+      <span class="badge badge-popular">Popular</span>
+    }
+    @if (product.badge === 'Nuevo') {
+      <span class="badge badge-nuevo">Nuevo</span>
+    }
+  </div>
+
+  <!-- Emoji -->
+  <div class="card-emoji-wrap" [style.background]="emojiBg">
+    <span class="card-emoji">{{ product.emoji }}</span>
+  </div>
+
+  <!-- Info -->
+  <div class="card-body">
+    <h3 class="card-name">{{ product.name }}</h3>
+    <p class="card-desc">{{ product.description }}</p>
+  </div>
+
+  <!-- Footer -->
+  <div class="card-footer">
+    <span class="card-price">${{ product.price }}</span>
+    <button
+      class="add-btn"
+      [class.added]="added()"
+      (click)="addToCart()"
+    >
+      @if (added()) {
+        <i class="pi pi-check"></i> Agregado
+      } @else {
+        + Agregar
+      }
+    </button>
+  </div>
+</article>

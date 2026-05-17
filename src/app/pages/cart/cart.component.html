@@ -1,0 +1,108 @@
+<div class="cart-page">
+
+  <!-- Left column: item list -->
+  <section class="cart-items-col">
+    <h2 class="col-title">
+      Mi carrito
+      @if (cart.itemCount() > 0) {
+        <span class="item-count">({{ cart.itemCount() }} producto{{ cart.itemCount() !== 1 ? 's' : '' }})</span>
+      }
+    </h2>
+
+    @if (cart.items().length === 0) {
+      <div class="empty-cart">
+        <span class="empty-icon">🛒</span>
+        <p class="empty-title">Tu carrito está vacío</p>
+        <p class="empty-sub">Agrega productos desde el menú</p>
+        <a routerLink="/catalog" class="back-link">Ver menú</a>
+      </div>
+    } @else {
+      <div class="items-list">
+        @for (item of cart.items(); track item.product.id) {
+          <app-cart-item
+            [item]="item"
+            (quantityChange)="cart.updateQty(item.product.id, $event)"
+            (remove)="cart.removeItem(item.product.id)"
+          />
+        }
+      </div>
+    }
+  </section>
+
+  <!-- Right column: summary -->
+  <aside class="cart-summary">
+    <h3 class="summary-title">RESUMEN</h3>
+
+    <div class="summary-rows">
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <span>${{ cart.subtotal() }}</span>
+      </div>
+      <div class="summary-row">
+        <span>Envío</span>
+        <span [class.free]="cart.shipping() === 0">
+          {{ cart.shipping() === 0 ? 'Gratis' : '$' + cart.shipping() }}
+        </span>
+      </div>
+      @if (cart.discount() > 0) {
+        <div class="summary-row discount-row">
+          <span>Descuento ({{ cart.discountCode() }})</span>
+          <span>−${{ cart.discount() }}</span>
+        </div>
+      }
+      <div class="summary-divider"></div>
+      <div class="summary-row total-row">
+        <span>Total</span>
+        <span>${{ cart.total() }}</span>
+      </div>
+    </div>
+
+    <!-- Promo code -->
+    <div class="promo-section">
+      <div class="promo-input-wrap">
+        <input
+          pInputText
+          class="promo-input"
+          type="text"
+          placeholder="Código promocional"
+          [value]="promoInput()"
+          (input)="onPromoInput($any($event.target).value)"
+        />
+        <button class="promo-apply-btn" (click)="applyPromo()" [disabled]="promoStatus() === 'loading'">
+          {{ promoStatus() === 'loading' ? '⏳' : 'Aplicar' }}
+        </button>
+      </div>
+      @if (promoStatus() === 'success') {
+        <p class="promo-msg success">✓ Código aplicado correctamente</p>
+      }
+      @if (promoStatus() === 'invalid') {
+        <p class="promo-msg error">✗ Código no válido</p>
+      }
+      @if (promoStatus() === 'already') {
+        <p class="promo-msg error">Ya aplicaste ese código</p>
+      }
+    </div>
+
+    <!-- CTA -->
+    <a
+      routerLink="/checkout"
+      class="checkout-btn"
+      [class.disabled]="cart.items().length === 0"
+      (click)="$event.preventDefault(); cart.items().length > 0 && $any($event.target).closest('a').href && null"
+    >
+      <button class="checkout-btn-inner" [disabled]="cart.items().length === 0">
+        Ir a pagar →
+      </button>
+    </a>
+
+    <div class="security-note">
+      <i class="pi pi-lock"></i>
+      Pago seguro y encriptado
+    </div>
+
+    <p class="shipping-note">
+      Envío gratis en pedidos mayores a $200. Tiempo estimado: 25–35 min.
+    </p>
+  </aside>
+
+</div>

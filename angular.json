@@ -90,9 +90,6 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "servePath": "/ecommerce/"
-          },
           "configurations": {
             "production": {
               "buildTarget": "ecommerce-frontend:build:production"

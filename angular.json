@@ -84,7 +84,17 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
-            }
+            },
+            "cloud": {      
+              "fileReplacements": [        
+                {          
+                  "replace": "src/environments/environment.ts",          
+                  "with": "src/environments/environment.cloud.ts"        
+                }      
+              ],      
+              "outputHashing": "all"  
+            } 
+          }
           },
           "defaultConfiguration": "production"
         },
@@ -130,4 +140,3 @@
       }
     }
   }
-}
